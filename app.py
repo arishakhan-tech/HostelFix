@@ -340,5 +340,12 @@ def forbidden(_): return render_template("error.html",message="You do not have p
 def not_found(_): return render_template("error.html",message="Page not found."),404
 
 init_db()
-if __name__=="__main__":
-    app.run(debug=True)
+
+if __name__ == "__main__":
+    import os
+    app.run(
+        host="0.0.0.0",
+        port=int(os.environ.get("PORT", 5000)),
+        debug=False
+    )
+
