@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% from "_ui.html" import pill %}
+{% block content %}
+<h1>Outpass &amp; Late-Entry</h1>
+<p class="subtitle">Request an outpass and track approvals &amp; returns</p>
+<div class="split">
+  <section class="card">
+    <h2>Request an Outpass</h2>
+    <form method="post" action="{{ url_for('add_outpass') }}">
+      <label>Reason<textarea name="reason" placeholder="Reason for leaving" required></textarea></label>
+      <label>Expected return<input type="datetime-local" name="expected_return" required></label>
+      <button class="btn">Request Outpass</button>
+    </form>
+    <p class="note">Demo note: the OTP is shown on screen after you request a pass; it is not sent to a parent by SMS.</p>
+  </section>
+  <section class="card">
+    <h2>Outpass Log</h2>
+    {% for o in outpasses %}
+      <div class="item">
+        <div class="title">{{ o['reason'] }}</div>
+        <div class="desc">Expected return: {{ o['expected_return']|dt }}</div>
+        <div class="row">{{ pill(o['status']) }}</div>
+        {% if o['status'] == 'PENDING_OTP' %}
+          <form method="post" action="{{ url_for('verify_otp', oid=o['id']) }}" class="inline">
+            <input name="otp" placeholder="6-digit OTP" required><button class="btn small">Verify</button>
+          </form>
+        {% endif %}
+        {% if o['status'] in ['APPROVED', 'OUT', 'RETURNED', 'LATE'] %}
+          <code>Gate token: {{ o['qr_token'] }}</code>
+        {% endif %}
+      </div>
+    {% else %}
+      <p class="empty">No outpasses yet.</p>
+    {% endfor %}
+  </section>
+</div>
+{% endblock %}

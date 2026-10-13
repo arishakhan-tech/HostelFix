@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% from "_ui.html" import pill %}
+{% block content %}
+<h1>Laundry Tracking</h1>
+<p class="subtitle">Move each batch from pickup to return</p>
+<section class="card">
+  <h2>Laundry Log</h2>
+  {% for l in laundry %}
+    <div class="item">
+      <div class="title">{{ l['student_name'] }}{% if l['room'] %} ({{ l['room'] }}){% endif %}</div>
+      <div class="desc">{{ l['item_count'] }} item(s) — picked up {{ l['picked_up_at']|dt }}</div>
+      <div class="row">{{ pill(l['status']) }}</div>
+      <form method="post" action="{{ url_for('laundry_status', item_id=l['id']) }}" class="inline">
+        <select name="status">
+          {% for s in ['PICKED_UP', 'IN_PROGRESS', 'READY', 'RETURNED'] %}
+            <option value="{{ s }}" {{ 'selected' if s == l['status'] }}>{{ s|replace('_', ' ')|title }}</option>
+          {% endfor %}
+        </select>
+        <button class="btn small">Save</button>
+      </form>
+    </div>
+  {% else %}
+    <p class="empty">No laundry requests.</p>
+  {% endfor %}
+</section>
+{% endblock %}

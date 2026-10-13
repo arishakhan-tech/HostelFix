@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% from "_ui.html" import pill %}
+{% block content %}
+<h1>Maintenance Complaints</h1>
+<p class="subtitle">Urgent complaints are listed first</p>
+{% include "_repeats.html" %}
+<section class="card">
+  <h2>All Complaints</h2>
+  {% for c in complaints %}
+    <div class="item">
+      <div class="title">{{ c['student_name'] }} ({{ c['room'] }})</div>
+      <div class="desc"><strong>{{ c['category'] }}</strong> — {{ c['description'] }}</div>
+      <div class="row">{{ pill(c['status']) }}{% if c['priority'] == 'URGENT' %}{{ pill('URGENT') }}{% endif %}
+        <span class="meta">{{ c['created_at']|dt }}</span></div>
+      <form method="post" action="{{ url_for('complaint_status', cid=c['id']) }}" class="inline">
+        <select name="status">
+          {% for s in ['PENDING', 'ASSIGNED', 'IN_PROGRESS', 'RESOLVED'] %}
+            <option value="{{ s }}" {{ 'selected' if s == c['status'] }}>{{ s|replace('_', ' ')|title }}</option>
+          {% endfor %}
+        </select>
+        <button class="btn small">Save</button>
+      </form>
+    </div>
+  {% else %}
+    <p class="empty">No complaints.</p>
+  {% endfor %}
+</section>
+{% endblock %}

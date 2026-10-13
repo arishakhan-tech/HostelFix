@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% from "_ui.html" import pill %}
+{% block content %}
+<h1>Outpass &amp; Late-Entry</h1>
+<p class="subtitle">Approve requests once the parent OTP has been verified</p>
+<section class="card">
+  <h2>Outpass Approvals</h2>
+  {% for o in outpasses %}
+    <div class="item">
+      <div class="title">{{ o['student_name'] }}{% if o['room'] %} ({{ o['room'] }}){% endif %}</div>
+      <div class="desc">{{ o['reason'] }}<br><span class="meta">Return by {{ o['expected_return']|dt }}</span></div>
+      <div class="row">{{ pill(o['status']) }}</div>
+      {% if o['status'] == 'PENDING_PARENT' %}
+        <form method="post" action="{{ url_for('approve_outpass', oid=o['id']) }}" class="inline">
+          <button class="btn small" name="action" value="approve">Approve</button>
+          <button class="btn small danger" name="action" value="reject">Reject</button>
+        </form>
+      {% endif %}
+    </div>
+  {% else %}
+    <p class="empty">No outpass requests.</p>
+  {% endfor %}
+</section>
+{% endblock %}

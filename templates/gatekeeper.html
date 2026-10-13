@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% from "_ui.html" import stat, pill %}
+{% block content %}
+<h1>Gate Scan</h1>
+<p class="subtitle">Record student exits and entries</p>
+<div class="stats">
+  {{ stat('Out now', stats.out_now) }}
+  {{ stat('Awaiting exit', stats.awaiting_exit) }}
+  {{ stat('Late returns', stats.late_returns) }}
+  {{ stat('Returned', stats.returned) }}
+</div>
+<div class="split">
+  <section class="card">
+    <h2>Scan / Verify Outpass</h2>
+    <form method="post">
+      <label>QR token<input name="qr_token" required placeholder="Paste outpass token"></label>
+      <button class="btn">Record Gate Scan</button>
+    </form>
+    <p class="note">Paste the student's gate token to record exit or entry. Camera scanning can be added later.</p>
+  </section>
+  <section class="card">
+    <h2>Outpass Log</h2>
+    {% for o in logs %}
+      <div class="item">
+        <div class="title">{{ o['student_name'] }}{% if o['room'] %} ({{ o['room'] }}){% endif %}</div>
+        <div class="desc">Expected return: {{ o['expected_return']|dt }}<br>
+          <span class="meta">Exit: {{ o['exit_time']|dt }} &middot; Entry: {{ o['entry_time']|dt }}</span></div>
+        <div class="row">{{ pill('LATE' if o['is_late'] else o['status']) }}</div>
+      </div>
+    {% else %}
+      <p class="empty">No outpasses.</p>
+    {% endfor %}
+  </section>
+</div>
+{% endblock %}

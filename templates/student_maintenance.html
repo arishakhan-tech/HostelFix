@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% from "_ui.html" import pill %}
+{% block content %}
+<h1>Maintenance Complaints</h1>
+<p class="subtitle">Report an issue and track its resolution status</p>
+<div class="split">
+  <section class="card">
+    <h2>Raise a Complaint</h2>
+    <form method="post" action="{{ url_for('add_complaint') }}">
+      <label>Category
+        <select name="category" required>
+          <option value="">Choose one</option>
+          <option>Electrical</option><option>Plumbing</option><option>Wi-Fi</option>
+          <option>Furniture</option><option>Cleaning</option><option>Other</option>
+        </select>
+      </label>
+      <label>Room<input name="room" value="{{ user['room'] or '' }}" required></label>
+      <label>Priority
+        <select name="priority"><option value="NORMAL">Normal</option><option value="URGENT">Urgent</option></select>
+      </label>
+      <label>Description<textarea name="description" placeholder="Describe the issue" required></textarea></label>
+      <button class="btn">Submit Complaint</button>
+    </form>
+  </section>
+  <section class="card">
+    <h2>Complaint History</h2>
+    {% for c in complaints %}
+      <div class="item">
+        <div class="title">{{ c['category'] }} ({{ c['room'] }})</div>
+        <div class="desc">{{ c['description'] }}</div>
+        <div class="row">{{ pill(c['status']) }}{% if c['priority'] == 'URGENT' %}{{ pill('URGENT') }}{% endif %}
+          <span class="meta">{{ c['created_at']|dt }}</span></div>
+      </div>
+    {% else %}
+      <p class="empty">No complaints yet.</p>
+    {% endfor %}
+  </section>
+</div>
+{% endblock %}

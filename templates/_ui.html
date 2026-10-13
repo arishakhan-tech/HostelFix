@@ -1,0 +1,30 @@
+{# Reusable UI pieces: status pills, stat tiles, module tiles #}
+
+{% macro pill(status) -%}
+  {%- set labels = {
+    'PENDING': 'Pending', 'ASSIGNED': 'Assigned', 'IN_PROGRESS': 'In progress', 'RESOLVED': 'Resolved',
+    'PICKED_UP': 'Picked up', 'READY': 'Ready', 'RETURNED': 'Returned',
+    'PENDING_OTP': 'Awaiting OTP', 'PENDING_PARENT': 'Pending approval', 'APPROVED': 'Approved',
+    'OUT': 'Out', 'LATE': 'Late return', 'REJECTED': 'Rejected',
+    'URGENT': 'Urgent', 'NORMAL': 'Normal'
+  } -%}
+  {%- set kinds = {
+    'PENDING': 'pending', 'PICKED_UP': 'pending', 'PENDING_OTP': 'pending', 'PENDING_PARENT': 'pending',
+    'ASSIGNED': 'info', 'IN_PROGRESS': 'info', 'APPROVED': 'info', 'OUT': 'info', 'NORMAL': 'info',
+    'RESOLVED': 'done', 'READY': 'done', 'RETURNED': 'done',
+    'LATE': 'bad', 'REJECTED': 'bad', 'URGENT': 'bad'
+  } -%}
+  <span class="pill pill-{{ kinds.get(status, 'info') }}">{{ labels.get(status, status|replace('_',' ')|title) }}</span>
+{%- endmacro %}
+
+{% macro stat(label, value) -%}
+  <div class="stat"><div class="label">{{ label }}</div><div class="value">{{ value }}</div></div>
+{%- endmacro %}
+
+{% macro module(href, icon, tone, title, text) -%}
+  <a class="module" href="{{ href }}">
+    <div class="icon {{ tone }}">{{ icon }}</div>
+    <h3>{{ title }}</h3>
+    <p>{{ text }}</p>
+  </a>
+{%- endmacro %}

@@ -1,0 +1,17 @@
+{% extends "base_public.html" %}
+{% block content %}
+<section class="card authcard">
+  <h1>Welcome back</h1>
+  <form method="post">
+    <label>Email<input type="email" name="email" required></label>
+    <label>Password<input type="password" name="password" required></label>
+    <button class="btn">Log in</button>
+  </form>
+  <div class="demo">
+    Demo password: <code>password123</code><br>
+    Student: student@hostelfix.test<br>
+    Warden: warden@hostelfix.test<br>
+    Gatekeeper: gatekeeper@hostelfix.test
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends "base_public.html" %}
+{% from "_ui.html" import module %}
+{% block content %}
+<section class="hero">
+  <div class="eyebrow">HOSTEL OPS, DIGITIZED</div>
+  <h1>Maintenance, laundry and outpass — one system instead of three queues.</h1>
+  <p>Replace the register, WhatsApp forwards and paper slips with one simple dashboard.</p>
+  <div class="actions">
+    <a class="btn" href="{{ url_for('login') }}">Log in</a>
+    <a class="btn ghost" href="{{ url_for('register') }}">Create account</a>
+  </div>
+</section>
+<section class="modules">
+  {{ module(url_for('login'), '⚠', 'orange', 'Maintenance Complaints', 'Report and track electrical, plumbing, Wi-Fi and furniture issues.') }}
+  {{ module(url_for('login'), '🧺', 'blue', 'Laundry Tracking', 'Digital drop-off and pickup log, no more lost registers.') }}
+  {{ module(url_for('login'), '🔒', 'blue', 'Outpass & Late-Entry', 'Request, approve and track exits with automatic late flags.') }}
+</section>
+{% endblock %}

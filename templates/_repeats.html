@@ -1,0 +1,6 @@
+{% if repeats %}
+<section class="alert">
+  <h2>Repeat-room flags (last 30 days)</h2>
+  {% for r in repeats %}<p><strong>Room {{ r['room'] }}</strong> — {{ r['total'] }} complaints</p>{% endfor %}
+</section>
+{% endif %}

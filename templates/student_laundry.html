@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% from "_ui.html" import pill %}
+{% block content %}
+<h1>Laundry Tracking</h1>
+<p class="subtitle">Log drop-offs and confirm items returned</p>
+<div class="split">
+  <section class="card">
+    <h2>Log a Drop-off</h2>
+    <form method="post" action="{{ url_for('add_laundry') }}">
+      <label>Number of Items<input type="number" min="1" max="100" name="item_count" placeholder="e.g. 6" required></label>
+      <button class="btn">Log Drop-off</button>
+    </form>
+  </section>
+  <section class="card">
+    <h2>Laundry Log</h2>
+    {% for l in laundry %}
+      <div class="item">
+        <div class="title">{{ l['item_count'] }} item(s)</div>
+        <div class="desc">Dropped {{ l['picked_up_at']|dt }}</div>
+        <div class="row">{{ pill(l['status']) }}
+          {% if l['status'] == 'READY' %}
+            <form method="post" action="{{ url_for('confirm_laundry', item_id=l['id']) }}"><button class="btn small">Confirm receipt</button></form>
+          {% endif %}
+        </div>
+      </div>
+    {% else %}
+      <p class="empty">No laundry records yet.</p>
+    {% endfor %}
+  </section>
+</div>
+{% endblock %}

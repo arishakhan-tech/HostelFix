@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% from "_ui.html" import stat, module %}
+{% block content %}
+<h1>Dashboard</h1>
+<p class="subtitle">Overview of your hostel activity</p>
+<div class="stats">
+  {{ stat('Open complaints', stats.open_complaints) }}
+  {{ stat('Laundry in progress', stats.laundry_active) }}
+  {{ stat('Active outpasses', stats.active_outpasses) }}
+  {{ stat('Your room', user['room'] or '—') }}
+</div>
+<div class="modules">
+  {{ module(url_for('student_maintenance'), '⚠', 'orange', 'Maintenance Complaints', 'Report and track electrical, plumbing, Wi-Fi & furniture issues') }}
+  {{ module(url_for('student_laundry'), '🧺', 'blue', 'Laundry Tracking', 'Digital drop-off and pickup log, no more lost registers') }}
+  {{ module(url_for('student_outpass'), '🔒', 'blue', 'Outpass & Late-Entry', 'Request, approve, and track exits with automatic late flags') }}
+</div>
+{% endblock %}
